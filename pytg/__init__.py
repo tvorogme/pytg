@@ -78,7 +78,7 @@ class Telegram(object):
             os.setpgrp()
 
         atexit.register(self.stop_cli)
-        args = [*suffix,
+        args = [*self.suffix,
             self._tg_cli, '-R', '-W', '-P', str(port),
             '-k', self._public_key_file, '--json',
             '--permanent-peer-ids', '--permanent-peer-ids',
