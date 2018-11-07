@@ -24,11 +24,12 @@ class Telegram(object):
     """
 
     def __init__(self, host="127.0.0.1", port=4458, telegram=None, pubkey_file=None, custom_cli_args=None,
-                 home_directory=None):
+                 home_directory=None, suffix=[]):
         from .sender import Sender
         from .receiver import Receiver
 
         self.home_dir = home_directory
+        self.suffix = suffix
 
         self._proc = None
         if telegram and pubkey_file:
@@ -77,11 +78,12 @@ class Telegram(object):
             os.setpgrp()
 
         atexit.register(self.stop_cli)
-        args = [
+        args = [*suffix,
             self._tg_cli, '-R', '-W', '-P', str(port),
             '-k', self._public_key_file, '--json',
             '--permanent-peer-ids', '--permanent-peer-ids',
         ]
+        
         if custom_cli_args is not None:
             if not isinstance(custom_cli_args, (list, tuple)):
                 raise TypeError("custom_cli_args should be a list or a tuple.")
